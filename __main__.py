@@ -34,10 +34,9 @@ def get_channel(name):
 
 @client.event
 async def on_message(msg):
-    if msg.author == user:
-        return
-    if user.metion in msg.content:
-        m = msg.content.split(user.mention + " ")[-1]
+    mention = client.user.mention.replace("@", "@!")
+    if mention in msg.content:
+        m = msg.content.split(mention + " ")[-1]
         if m.lower().startswith("what are you "):
             q = m.lower()[13:].split("?")[0]
             await msg.channel.send("What am I " + q + "? What are _you_ " + q + "?!?")
@@ -62,15 +61,20 @@ async def on_message(msg):
                 return
             await msg.channel.send("Happy? :smirk:")
             return
-        await msg.channel.send("\"" + m[0].upper() + m[1:] + " when preceded by its quotation\" " + m + " when "
-                                                                                                        "preceded by "
-                                                                                                        "its "
-                                                                                                        "quotation")
-        return
-    if "wtf" in msg.content or "fuck" in msg.content:
+        quine = "\"" + m[0].upper() + m[1:] + " when preceded by its quotation\" " + m + " when preceded by its " \
+                                                                                         "quotation "
+        await msg.channel.send(quine)
+        quined.append(quine)
+    if "wtf" in msg.content or "fuck" in msg.content or "hell" in msg.content or "damn" in msg.content or "shut up" in\
+            msg.content:
         await msg.channel.send("Watch your language " + msg.author.mention + ". If I had mod permission I would ban "
                                                                              "you. :b: :a: :regional_indicator_n:")
         return
+
+
+@client.event
+async def on_ready():
+    print('We have logged in as {0.user}'.format(client))
 
 
 def main():
